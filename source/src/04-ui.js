@@ -201,6 +201,8 @@ function Settings() {
   const s = S.settings(); const close = () => setV({ overlay: null });
   const fileRef = useRef();
   const status = DB.mode === 'synced' ? 'Saved to your account. Changes sync across your devices.' : DB.mode === 'syncing' ? 'Connecting to your account storage…' : 'Saved in this browser only. Export regularly to keep a copy.';
+  const waiting = DB.dirty ? Object.keys(DB.dirty).length : 0;
+  const statusFull = waiting ? status + ' ' + waiting + (waiting === 1 ? ' change' : ' changes') + ' waiting to sync' + (DB.lastErr ? ' (' + DB.lastErr + ')' : '') + '.' : status;
   const doExport = async () => {
     const name = `master-backup-${todayStr()}.json`; const r = await offerFile(name, exportData());
     if (r === null) setV({ overlay: 'exporttext' }); else if (r) toast('Backup saved.');

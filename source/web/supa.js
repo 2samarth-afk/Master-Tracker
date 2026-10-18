@@ -27,9 +27,9 @@ async function flush(col, id, retry = 0) {
   try {
     const ref = DB.db.collection(col).doc(id);
     if (data) await ref.set(clone(data)); else await ref.delete();
-    if (DB.seq[key] === seq) { delete DB.pending[key]; delete DB.dirty[key]; saveDirty(); }
+    if (DB.seq[key] === seq) { delete DB.pending[key]; delete DB.dirty[key]; saveDirty(); DB.lastErr = ''; }
   } catch (e) {
-    const code = e && e.code;
+    const code = e && e.code; DB.lastErr = (e && e.message) || String(e);
     if (code === 'unavailable' || code === 'auth') {
       clearTimeout(DB.timers[key]);
       DB.timers[key] = setTimeout(() => flush(col, id, retry + 1), Math.min(60000, 2000 * Math.pow(2, retry)));

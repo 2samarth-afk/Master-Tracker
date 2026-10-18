@@ -1678,7 +1678,7 @@ function Settings() {
     rd.onload = async () => { const ok = await ask({ title: 'Replace everything with this backup?', body: 'Your current data will be replaced by the file’s contents. Export first if you want a copy.', confirm: 'Replace', danger: true }); if (!ok) return; try { importData(rd.result); toast('Backup restored.'); } catch (err) { toast(err.message || 'That file could not be read.'); } };
     rd.readAsText(file); e.target.value = '';
   };
-  return html`<${Modal} title="settings" sub=${status} onClose=${close}>
+  return html`<${Modal} title="settings" sub=${statusFull} onClose=${close}>
     <div class="fields">
       <div class="field"><label for="st-name">Your name</label><input id="st-name" class="input" value=${s.name} onInput=${e => S.setSettings({ name: e.target.value })} /></div>
       <div class="field"><label for="st-theme">Theme</label><select id="st-theme" class="input" value=${s.theme} onChange=${e => S.setSettings({ theme: e.target.value })}><option value="system">Match system</option><option value="light">Light</option><option value="dark">Dark</option></select></div>

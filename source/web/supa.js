@@ -150,6 +150,8 @@ async function startSync(sb, user) {
   const catchUp = () => { if (Date.now() - lastPull < 5000) return; lastPull = Date.now(); load(false); };
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') catchUp(); });
   window.addEventListener('online', () => { lastPull = 0; catchUp(); });
+  window.addEventListener('focus', catchUp);
+  setInterval(() => { if (document.visibilityState === 'visible') catchUp(); }, 30000);
 
   // Note images: private bucket, long-lived signed links
   DB.assets = {

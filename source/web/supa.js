@@ -122,7 +122,7 @@ async function startSync(sb, user) {
       return true;
     } catch (e) {
       if (first) {
-        DB.mode = 'local'; emit(); toast('Offline. Showing the copy saved on this device.');
+        DB.mode = 'local'; emit(); toast(e && e.code === 'unavailable' ? 'Offline. Showing the copy saved on this device.' : 'Could not load from the database: ' + ((e && e.message) || 'unknown error'));
         Object.keys(DB.dirty).forEach(k => { if (!DB.pending[k]) { const [c, ...rest] = k.split('/'); queueWrite(c, rest.join('/')); } });
         const retry = setInterval(async () => { if (await load(false)) clearInterval(retry); }, 15000);
       }
